@@ -29,4 +29,5 @@ export async function loginTest() {
     const session = await fetchAuthSession()
     console.log("Login result:", result)
     console.log("Auth session:", session)
+    console.log("Id token", session.tokens?.idToken?.toString())
 }
