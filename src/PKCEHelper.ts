@@ -19,6 +19,6 @@ export async function generateCodeChallenge(codeVerifier: string): Promise<strin
 export async function generatePKCECredentials() {
   const codeVerifier = generateCodeVerifier();
   const codeChallenge = await generateCodeChallenge(codeVerifier);
-  sessionStorage.setItem("codeChallenge", codeChallenge)
+  sessionStorage.setItem("codeVerifier", codeVerifier)
   return codeChallenge;
 }
