@@ -1,15 +1,18 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import config from "../config.json";
+import { AuthContext } from "../components/authContext.tsx/AuthContext";
 const AuthCallbackPage = () => {
     const authReturnedCode = window.location.search.split("&")[0]
         .replace("?code=", "")
-    const [tokens, setTokens] = useState(null);
+    const context = useContext(AuthContext);
+
+    if (!context) throw new Error("AuthCallBackPage must be used within AuthProvider, context does not currently exist")
+    const { tokens, setTokens } = context;
     useEffect(() => {
         (async () => {
             try {
-                console.log("authReturnedCode:", authReturnedCode)
+                console.log("AuthProvider:", tokens)
                 const codeVerifier = sessionStorage.getItem("codeVerifier");
-                console.log("codeVerifier:", codeVerifier)
                 if (!codeVerifier) {
                     console.error("codeVerifier not found")
                 }
@@ -35,7 +38,7 @@ const AuthCallbackPage = () => {
                     }
                 })
 
-                if(!response.ok) {
+                if (!response.ok) {
                     console.error(`token request failure status code:${response.status}`)
                 }
 
@@ -45,8 +48,8 @@ const AuthCallbackPage = () => {
 
                 sessionStorage.removeItem("codeVerifier")
                 console.log("tokens:", json)
-            } catch(e) {
-                console.error("Unexpected error fetching tokens")
+            } catch (e) {
+                console.error("Unexpected error fetching tokens", e)
             }
         })()
     }, [])
