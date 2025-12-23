@@ -1,5 +1,3 @@
-
-
 const ToDoList = () => {
     const mockData = ["Laundy", "Dishes", "Hoover"]
     const taskList = mockData.map((task, i) => {

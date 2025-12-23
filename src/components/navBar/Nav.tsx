@@ -7,12 +7,14 @@ const Nav = () => {
     const context = useAuth();
     const { isAuthenticated, user } = context;
     const logout = useHandleLogout();
+    console.log("isAuthenticated:", isAuthenticated)
     if (isAuthenticated && user) {
         return (
             <>
                 <nav>
                     <p>Hi {user["cognito:username"]}</p>
                     <Link to="/">Home</Link>
+                    <Link to="/to-do-list">To do list</Link>
                     <a onClick={() => logout()}>Logout</a>
                 </nav>
             </>
