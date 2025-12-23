@@ -1,11 +1,12 @@
 import { jwtDecode, type JwtPayload } from "jwt-decode";
 import { useState } from "react";
 import { createContext } from "react";
+import { isTokenExpired } from "../../authHelper";
 
 type AuthContextType = {
     tokens: Tokens | null,
     setTokens: React.Dispatch<React.SetStateAction<Tokens | null>>,
-    user: JwtPayload | User | null,
+    user: CognitoTokenPayload | User | null,
     isAuthenticated: boolean
 }
 
@@ -27,16 +28,21 @@ type User = {
     exp: number
 }
 
+type CognitoTokenPayload = JwtPayload | User | null;
+
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }) => {
     const [tokens, setTokens] = useState<Tokens | null>(null)
     const user = tokens?.id_token && !tokens.error ? jwtDecode(tokens.id_token) : null;
-    const date = new Date;
-    const currentTime = parseInt(date.getTime().toString().slice(0, -3));
-console.log("User:", user)
-    if(tokens !== null && user?.exp === null) throw new Error("Tokens present but user authentication expiry not found")
-    const isAuthenticated = currentTime != user?.exp && currentTime <= user?.exp
+    if (tokens !== null && user?.exp === null) throw new Error("Tokens present but user authentication expiry not found")
+
+    console.log("User:", user)
+    let isAuthTokenExpired = false;
+    if (user && user.exp) {
+        isAuthTokenExpired = isTokenExpired(user?.exp);
+    }
+    const isAuthenticated = isAuthTokenExpired;
     return (
         <AuthContext value={{ tokens, setTokens, user, isAuthenticated }}>
             {children}
