@@ -1,25 +1,27 @@
 import { useContext } from "react"
-import { TaskContext } from "../components/taskContext/TaskContext"
-import addTask from "../services/addTask";
-import type { Task } from "../models/taskModels";
 
+import { TaskContext } from "../components/taskContext/TaskContext"
+import type { Task } from "../models/taskModels";
+import addTask from "../services/addTask";
+import deleteTask from "../services/deleteTask"
 const ToDoList = () => {
     const taskContext = useContext(TaskContext);
 
     if (!taskContext) throw new Error("taskContext does not exist")
     const { tasks, setTasks } = taskContext;
     // console.log("TaskContext length", tasks.length)
-    console.log("tasks type:", typeof tasks)
-    console.log("tasks @ ToDoList:", tasks)
-    console.log("tasks length @ ToDoList:", tasks.length)
+    // console.log("tasks type:", typeof tasks)
+    // console.log("tasks @ ToDoList:", tasks)
+    // console.log("tasks length @ ToDoList:", tasks.length)
 
-    const taskList = tasks.map((task: Task, i: number) => {
+    const taskList = tasks.map((task: Task, taskId: number) => {
         return (
             // individual task
             // Add in further info such as notes, label etc.
-            <div key={i}>
+            <div key={taskId}>
                 <h2>{task.title}</h2>
                 <p>{task.progress}</p>
+                <button onClick={() => deleteTask({taskId, tasks, setTasks})}>-</button>
             </div>
         )
     })
