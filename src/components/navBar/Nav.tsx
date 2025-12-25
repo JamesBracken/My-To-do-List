@@ -7,7 +7,6 @@ const Nav = () => {
     const context = useAuth();
     const { isAuthenticated, user } = context;
     const logout = useHandleLogout();
-    console.log("isAuthenticated:", isAuthenticated)
     if (isAuthenticated && user) {
         return (
             <>
