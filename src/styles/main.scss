@@ -1,0 +1,7 @@
+.task-update-modal-active {
+    z-index: 10;
+
+    &__background {
+        z-index: 9
+    }
+}
