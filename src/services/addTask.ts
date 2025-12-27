@@ -11,7 +11,7 @@ const addTask = ({ tasks, setTasks }: addTaskParams) => {
             ...tasks,
             {
                 title: taskInput.value,
-                progress: "incomplete"
+                status: "incomplete"
             }
         ])
     }

@@ -15,7 +15,7 @@ const ToDoList = () => {
     if (!taskContext) throw new Error("taskContext does not exist")
     const { tasks, setTasks } = taskContext;
     const [isOpen, setIsOpen] = useState(false);
-
+    const [activeEditTask, setActiveEditTask] = useState<number | null>(null);
     const taskList = tasks.map((task: Task, taskId: number) => {
         return (
             // individual task
@@ -23,18 +23,22 @@ const ToDoList = () => {
             <div key={taskId}>
                 <h2>{task.title}</h2>
                 <p>{task.status}</p>
-                <button onClick={() => setIsOpen(true)}>Edit</button>
+                <button onClick={() => {
+                    setActiveEditTask(taskId)
+                    setIsOpen(true)
+                }}>Edit</button>
                 <button onClick={() => deleteTask({ taskId, tasks, setTasks })}>-</button>
             </div>
         )
     })
+    console.log("Tasks:", tasks)
     return (
         <>
             <label htmlFor="addTaskInput">Add Task</label>
             <input id="addTaskInput"></input>
             <button onClick={() => addTask({ tasks, setTasks })}>+</button>
             {taskList}
-            {isOpen && <TaskUpdateModal isOpen={isOpen} setIsOpen={setIsOpen} />}
+            {isOpen && <TaskUpdateModal activeEditTask={activeEditTask} setActiveEditTask={setActiveEditTask} isOpen={isOpen} setIsOpen={setIsOpen} tasks={tasks} setTasks={setTasks}  />}
         </>
     )
 }
