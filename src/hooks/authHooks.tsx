@@ -25,3 +25,10 @@ export const useHandleLogout = () => {
     return logoutFunction;
 
 }
+
+export const resetAuthState = () => {
+    const context = useContext(AuthContext)
+    if (!context) throw new Error("Context does not exist")
+    const { tokens, setTokens, user, isAuthenticated } = context
+    
+}

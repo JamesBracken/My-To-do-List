@@ -2,13 +2,14 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import config from "../config.json";
-import { useAuth } from "../hooks/authHooks";
+import { useAuth, useHandleLogout } from "../hooks/authHooks";
+import { validateAuthTokenResponse } from "../authHelper";
 
 const AuthCallbackPage = () => {
     const authInfo = useAuth();
     const navigate = useNavigate();
-
-    const { setTokens } = authInfo;
+    const handleLogout = useHandleLogout();
+    const { tokens, setTokens } = authInfo;
     const authReturnedCode = window.location.search.split("&")[0]
         .replace("?code=", "")
 
@@ -16,7 +17,7 @@ const AuthCallbackPage = () => {
     useEffect(() => {
         (async () => {
             try {
-                const codeVerifier= sessionStorage.getItem("codeVerifier");
+                const codeVerifier = sessionStorage.getItem("codeVerifier");
                 if (!codeVerifier) throw new Error("codeVerifier not found")
 
                 if (!authReturnedCode) {
@@ -40,17 +41,19 @@ const AuthCallbackPage = () => {
                     }
                 })
 
+                // PENDING_TASK: ADD FURTHER ERROR HANDLING HERE AND REDIRECT USER THEN DISPLAY FEEDBACK
                 if (!response.ok) {
                     console.error(`token request failure status code:${response.status}`)
                 }
 
-                const json = await response.json()
-                setTokens(json);
+                const responseJson = await response.json()
+                setTokens(responseJson);
+                // PENDING_TASK : DISPLAY USER ERROR MESSAGE
+                if (validateAuthTokenResponse(responseJson)) handleLogout();
                 sessionStorage.removeItem("codeVerifier")
                 navigate("/")
             } catch (e) {
                 console.error("Unexpected error fetching tokens", e)
-
             }
         })()
     }, [])
