@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { useState } from "react";
 
 import { TaskContext } from "../components/taskContext/TaskContext"
@@ -13,7 +13,7 @@ const ToDoList = () => {
     const taskContext = useContext(TaskContext);
     if (!taskContext) throw new Error("taskContext does not exist")
     const { tasks, setTasks } = taskContext;
-    const [isOpen, setIsOpen] = useState(false);
+    const [isTaskEditModalOpen, setIsTaskEditModalOpen] = useState(false);
     const [activeEditTask, setActiveEditTask] = useState<number | null>(null);
     const taskList = tasks.map((task: Task, taskId: number) => {
         return (
@@ -24,7 +24,7 @@ const ToDoList = () => {
                 <p>{task.status}</p>
                 <button onClick={() => {
                     setActiveEditTask(taskId)
-                    setIsOpen(true)
+                    setIsTaskEditModalOpen(true)
                 }}>Edit</button>
                 <button onClick={() => deleteTask({ taskId, tasks, setTasks })}>-</button>
             </div>
@@ -36,9 +36,9 @@ const ToDoList = () => {
             <input id="addTaskInput"></input>
             <button onClick={() => addTask({ tasks, setTasks })}>+</button>
             {taskList}
-            {isOpen && <TaskUpdateModal activeEditTask={activeEditTask} setActiveEditTask={setActiveEditTask} isOpen={isOpen} setIsOpen={setIsOpen} tasks={tasks} setTasks={setTasks} />}
+            {isTaskEditModalOpen && <TaskUpdateModal activeEditTask={activeEditTask} setActiveEditTask={setActiveEditTask} setIsTaskEditModalOpen={setIsTaskEditModalOpen} tasks={tasks} setTasks={setTasks} />}
         </>
     )
 }
 
-export default ToDoList
+export default ToDoList;
