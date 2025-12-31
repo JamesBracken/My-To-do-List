@@ -2,11 +2,12 @@ import type { Feedback } from "../components/userFeedbackContext/UserFeedbackCon
 
 type addUserFeedbackParams = {
     newFeedback: Feedback,
-    setFeedback: React.Dispatch<React.SetStateAction<Feedback[]>>
+    setUserFeedback: React.Dispatch<React.SetStateAction<Feedback[]>>
 }
 
-const addUserFeedback = ({ newFeedback, setFeedback }: addUserFeedbackParams) => {
-    setFeedback(prev => [...prev, newFeedback])
+const addUserFeedback = ({ newFeedback, setUserFeedback }: addUserFeedbackParams) => {
+    setUserFeedback(prev => [...prev, newFeedback])
+    console.log("set user feedback to add", newFeedback)
 }
 
 export default addUserFeedback;

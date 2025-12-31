@@ -1,22 +1,25 @@
 import { createContext, useState } from "react";
 
-type Feedback = {
+export type Feedback = {
     message: string,
     type: "message" | "error",
 }
 
 type FeedbackContextType = {
-    feedback: Feedback[],
-    setFeedback: React.Dispatch<React.SetStateAction<Feedback[]>>
+    userFeedback: Feedback[],
+    setUserFeedback: React.Dispatch<React.SetStateAction<Feedback[]>>,
+    isFeedbackModalOpen: boolean,
+    setIsFeedbackModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-export const FeedbackContext = createContext<FeedbackContextType | null>(null)
+export const UserFeedbackContext = createContext<FeedbackContextType | null>(null)
 
 export const FeedbackProvider = ({ children }) => {
-    const [feedback, setFeedback] = useState<Feedback[]>([])
+    const [userFeedback, setUserFeedback] = useState<Feedback[]>([])
+    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     return (
-        <FeedbackContext value={{ feedback, setFeedback }}>
+        <UserFeedbackContext value={{ userFeedback, setUserFeedback, isFeedbackModalOpen, setIsFeedbackModalOpen }}>
             {children}
-        </FeedbackContext>
+        </UserFeedbackContext>
     )
 }
