@@ -1,0 +1,37 @@
+.feedback-modal {
+    display: flex;
+    position: absolute;
+    top: 0px;
+    bottom: 0px;
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+
+    &__background {
+        z-index: 9;
+        width: 100%;
+        height: 100%;
+        background-color: darkslategray;
+        align-self: center;
+        justify-content: center;
+        opacity: 50%;
+    }
+
+    &__foreground,
+    &__foreground-error {
+        padding: 50px 10px;
+        flex-direction: column;
+        z-index: 10;
+        position: absolute;
+        background-color: rgb(187, 255, 187);
+        border-radius: 10px;
+        align-self: center;
+        justify-content: center;
+    }
+
+    &__foreground-error {
+        background-color: rgb(255, 161, 152);
+    }
+
+}

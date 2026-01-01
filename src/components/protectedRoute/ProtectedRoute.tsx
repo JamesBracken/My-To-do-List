@@ -1,17 +1,9 @@
 import { handleLogin } from "../../authHandlers";
 import { useAuth } from "../../hooks/authHooks";
-import { generatePKCECredentials } from "../../PKCEHelper";
 const ProtectedRoute = ({ children }) => {
-    const { isAuthenticated, tokens } = useAuth();
-    if (tokens) {
-        console.log("does tokens error exist", tokens.error)
-        console.log("tokens", tokens)
-    }
-    console.log("tokens !== null", tokens !== null)
-    console.log("isAuthenticated", isAuthenticated)
+    const { tokens } = useAuth();
 
     if (!tokens || (tokens && tokens?.error)) {
-        console.log("if invoking")
         handleLogin()
     }
     return children;

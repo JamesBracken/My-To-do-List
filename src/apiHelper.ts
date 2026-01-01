@@ -68,7 +68,6 @@ const api = {
                 }
             ).then(res => {
                 if (res.ok) {
-                    console.log(res.json())
                     return res.json()
                 } else if (res.status === 401 || res.status === 403) {
                     console.error("Forbidden or unauthorized request, redirecting to login")

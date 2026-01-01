@@ -6,11 +6,13 @@ import { isTokenExpired } from "../../authHelper";
 type AuthContextType = {
     tokens: Tokens | null,
     setTokens: React.Dispatch<React.SetStateAction<Tokens | null>>,
-    user: CognitoTokenPayload | User | null,
-    isAuthenticated: boolean
+    user: CognitoIdTokenPayload | User | null,
+    setUser: React.Dispatch<React.SetStateAction<CognitoIdTokenPayload>>,
+    isAuthenticated: boolean,
+    setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-type Tokens = {
+export type Tokens = {
     access_token: string,
     expires_in: number,
     id_token: string,
@@ -28,23 +30,23 @@ type User = {
     exp: number
 }
 
-type CognitoTokenPayload = JwtPayload | User | null;
+export type CognitoIdTokenPayload = JwtPayload | User | null;
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }) => {
     const [tokens, setTokens] = useState<Tokens | null>(null)
-    const user = tokens?.id_token && !tokens.error ? jwtDecode(tokens.id_token) : null;
-    if (tokens !== null && user?.exp === null) throw new Error("Tokens present but user authentication expiry not found")
+    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [user, setUser] = useState<CognitoIdTokenPayload>(null);
+    if (tokens !== null && user === null) setUser(tokens?.id_token && !tokens.error ? jwtDecode(tokens.id_token) : null)
 
-    console.log("User:", user)
-    let isAuthTokenExpired = false;
-    if (user && user.exp) {
-        isAuthTokenExpired = isTokenExpired(user?.exp);
+    if (tokens !== null && user?.exp === null) throw new Error("Tokens present but user authentication expiry not found")
+    if (user && user.exp && !isAuthenticated) {
+        setIsAuthenticated(!isTokenExpired(user.exp))
     }
-    const isAuthenticated = isAuthTokenExpired;
+
     return (
-        <AuthContext value={{ tokens, setTokens, user, isAuthenticated }}>
+        <AuthContext value={{ tokens, setTokens, user, setUser, isAuthenticated, setIsAuthenticated }}>
             {children}
         </AuthContext>
     )
