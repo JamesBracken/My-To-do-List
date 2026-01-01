@@ -8,17 +8,14 @@ export type Feedback = {
 type FeedbackContextType = {
     userFeedback: Feedback[],
     setUserFeedback: React.Dispatch<React.SetStateAction<Feedback[]>>,
-    isFeedbackModalOpen: boolean,
-    setIsFeedbackModalOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const UserFeedbackContext = createContext<FeedbackContextType | null>(null)
 
 export const FeedbackProvider = ({ children }) => {
     const [userFeedback, setUserFeedback] = useState<Feedback[]>([])
-    const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
     return (
-        <UserFeedbackContext value={{ userFeedback, setUserFeedback, isFeedbackModalOpen, setIsFeedbackModalOpen }}>
+        <UserFeedbackContext value={{ userFeedback, setUserFeedback }}>
             {children}
         </UserFeedbackContext>
     )
