@@ -37,7 +37,9 @@ export const AuthContext = createContext<AuthContextType | null>(null);
 export const AuthProvider = ({ children }) => {
     const [tokens, setTokens] = useState<Tokens | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
-    const [user, setUser] = useState<CognitoIdTokenPayload>(tokens?.id_token && !tokens.error ? jwtDecode(tokens.id_token) : null);
+    const [user, setUser] = useState<CognitoIdTokenPayload>(null);
+    if(tokens !== null && user === null) setUser(tokens?.id_token && !tokens.error ? jwtDecode(tokens.id_token) : null)
+
     if (tokens !== null && user?.exp === null) throw new Error("Tokens present but user authentication expiry not found")
 
     if (user && user.exp) setIsAuthenticated(!user?.exp)

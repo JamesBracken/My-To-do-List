@@ -22,8 +22,8 @@ export const useHandleLogout = () => {
 
 export const useResetAuthState = () => {
     const authContext = useContext(AuthContext)
+    if (!authContext) throw new Error("Auth context does not exist")
     return () => {
-        if (!authContext) throw new Error("Auth context does not exist")
         const { setTokens, setUser, setIsAuthenticated } = authContext;
         const codeVerifier = sessionStorage.getItem("codeVerifier");
         setTokens(null)
